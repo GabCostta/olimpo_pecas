@@ -8,6 +8,23 @@ import flechaRosa from "@assets/img/flecha_icon.svg";
 import { Link } from "react-router-dom";
 import "@styles/pages/Cartpage/Cartpage.css";
 
+const validateCEP = (cep) => {
+  // Valida se o CEP tem o formato correto (XXXXX-XXX ou XXXXXXXX)
+  const regex = /^[0-9]{5}-?[0-9]{3}$/;
+  return regex.test(cep);
+};
+
+const handleShippingCalculation = (cep, setShipping, setErrorMessage, setDiscountApplied) => {
+  if (validateCEP(cep)) {
+    // Se o CEP for válido, adiciona o valor do frete
+    setShipping(40.0);
+    setErrorMessage(''); // Limpa a mensagem de erro
+  } else {
+    // Se o CEP for inválido, exibe uma mensagem de erro
+    setShipping(0);
+    setErrorMessage('CEP inválido. Por favor, insira um CEP válido.');
+  }
+};
 
 function CartItem({ item, updateQuantity, removeItem }) {
   const price = isNaN(item.valoratual) ? 0 : parseFloat(item.valoratual);
@@ -15,10 +32,7 @@ function CartItem({ item, updateQuantity, removeItem }) {
   return (
     <div className="cart-item">
       <div className="item-details">
-
-
         <img src={farol} alt={item.titulo} />
-
         <div className="item-info">
           <h2>{item.titulo}</h2>
           <p>Cor: {item.cor}</p>
@@ -43,7 +57,6 @@ function CartItem({ item, updateQuantity, removeItem }) {
   );
 }
 
-
 const updateQuantity = (item, delta, cartItems, setCartItems) => {
   if (item.quantity + delta >= 1) {
     const updatedItems = cartItems.map((cartItem) =>
@@ -56,41 +69,45 @@ const updateQuantity = (item, delta, cartItems, setCartItems) => {
   }
 };
 
-
 const removeItem = (itemId, cartItems, setCartItems) => {
   const updatedItems = cartItems.filter((cartItem) => cartItem.id !== itemId);
   setCartItems(updatedItems);
   localStorage.setItem("cart", JSON.stringify(updatedItems));
 };
 
-function CartSummary({ cartItems }) {
+function CartSummary({ cartItems, shipping, discountApplied }) {
   const total = cartItems.reduce((acc, item) => {
     const price = isNaN(item.valoratual) ? 0 : parseFloat(item.valoratual.toString().replace(',', '.'));
     return acc + price * item.quantity;
   }, 0);
+
+  // O desconto é aplicado sobre a soma do valor dos produtos com o frete
+  const totalWithShipping = total + shipping;
+  const discount = discountApplied ? totalWithShipping * 0.1 : 0; // Calcula 10% de desconto
+  const totalWithDiscount = totalWithShipping - discount; // Subtrai o desconto
 
   return (
     <div className="cart-summary">
       <h2>RESUMO</h2>
       <div className="summary-details">
         <p>Subtotal: <span>R$ {total.toFixed(2)}</span></p>
-        <p>Frete: <span>R$ 0,00</span></p>
-        <p>Desconto: <span>{total === 0 ? "R$ 0,00" : "R$ 200,00"}</span></p>
+        <p>Frete: <span>R$ {shipping.toFixed(2)}</span></p>
+        <p>Desconto: <span>R$ {discount.toFixed(2)}</span></p>
         <p>
           Total:{" "}
           <span className="total-price">
-            {total === 0 ? "R$ 0,00" : `R$ ${Math.max(total - 200, 0).toFixed(2)}`}
+            {totalWithDiscount === 0 ? "R$ 0,00" : `R$ ${Math.max(totalWithDiscount, 0).toFixed(2)}`}
           </span>
         </p>
-        {total > 200 && (
+        {totalWithDiscount > 200 && (
           <p className="installments">
-            ou 10x de R$ {((total - 200) / 10).toFixed(2)} sem juros
+            ou 10x de R$ {((totalWithDiscount) / 10).toFixed(2)} sem juros
           </p>
         )}
-        {total <= 200 && total !== 0 && (
+        {totalWithDiscount <= 200 && totalWithDiscount !== 0 && (
           <p className="installments">Adicione mais itens para aproveitar o desconto!</p>
         )}
-        {total === 0 && (
+        {totalWithDiscount === 0 && (
           <p className="installments">Seu carrinho está vazio.</p>
         )}
       </div>
@@ -98,10 +115,29 @@ function CartSummary({ cartItems }) {
   );
 }
 
-
 function CartPage() {
   const [cartItems, setCartItems] = useState([]);
   const [character, setCharacter] = useState([]); // Definindo o estado para armazenar os produtos
+  const [shipping, setShipping] = useState(0);
+  const [cep, setCep] = useState("");
+  const [errorMessage, setErrorMessage] = useState(""); // Para armazenar a mensagem de erro
+  const [discountCode, setDiscountCode] = useState(""); // Para armazenar o código de desconto
+  const [discountApplied, setDiscountApplied] = useState(false); // Controle se o desconto foi aplicado
+  const [discountError, setDiscountError] = useState(""); // Para armazenar a mensagem de erro do desconto
+
+  const handleDiscountChange = (e) => {
+    setDiscountCode(e.target.value);
+  };
+
+  const applyDiscount = () => {
+    if (discountCode.toLowerCase() === "olimpo") {
+      setDiscountApplied(true); // Aplica o desconto se o código for "olimpo"
+      setDiscountError(''); // Limpa a mensagem de erro
+    } else {
+      setDiscountApplied(false); // Caso contrário, não aplica
+      setDiscountError('Código de desconto incorreto!');
+    }
+  };
 
   useEffect(() => {
     const savedCart = JSON.parse(localStorage.getItem("cart") || "[]");
@@ -142,17 +178,29 @@ function CartPage() {
           <section className="discount-shipping">
             <div className="discount">
               <strong>Calcular desconto</strong>
-              <input type="text" placeholder="Insira seu Cupom" />
-              <button>OK</button>
+              <input
+                type="text"
+                placeholder="Digite o código de desconto"
+                value={discountCode}
+                onChange={handleDiscountChange}
+              />
+              <button onClick={applyDiscount}>OK</button>
+              {discountError && <p className="error-message">{discountError}</p>} {/* Exibe o erro de desconto */}
             </div>
             <div className="shipping">
               <strong>Calcular Frete</strong>
-              <input type="text" placeholder="Insira seu CEP" />
-              <button>OK</button>
+              <input
+                type="text"
+                placeholder="Insira seu CEP"
+                value={cep}
+                onChange={(e) => setCep(e.target.value)}
+              />
+              <button onClick={() => handleShippingCalculation(cep, setShipping, setErrorMessage, setDiscountApplied)}>OK</button>
+              {errorMessage && <p className="error-message">{errorMessage}</p>} {/* Exibe a mensagem de erro */}
             </div>
           </section>
         </div>
-        <CartSummary cartItems={cartItems} />
+        <CartSummary cartItems={cartItems} shipping={shipping} discountApplied={discountApplied} />
       </div>
       <section className="container-produtos-em-alta">
         <div className="produtos-em-alta">
