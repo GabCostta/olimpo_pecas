@@ -1,0 +1,194 @@
+/* Contêiner do chat flutuante */
+.floating-chat-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+  }
+  
+  /* Botão para abrir/fechar o chat */
+  .chat-toggle-button {
+    background: #1976d2;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s, transform 0.3s;
+  }
+  
+  .chat-toggle-button:hover {
+    background: #1565c0;
+    transform: scale(1.1);
+  }
+  
+  /* Caixa de conversa */
+  .chat-box {
+    width: 350px;
+    height: 500px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    margin-top: 10px;
+  }
+  
+  /* Cabeçalho do chat */
+  .chat-header {
+    padding: 16px;
+    background: #1976d2;
+    color: white;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .chat-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  /* Área de mensagens */
+  .chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    scroll-behavior: smooth;
+  }
+  
+  /* Mensagem vazia */
+  .empty-messages {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+    font-size: 1rem;
+  }
+  
+  /* Wrapper da mensagem */
+  .message-wrapper {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .message-wrapper.user {
+    flex-direction: row-reverse;
+  }
+  
+  /* Avatar */
+  .avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    background: #e3f2fd;
+    color: #1976d2;
+  }
+  
+  .user .avatar {
+    background: #1976d2;
+    color: white;
+  }
+  
+  .bot .avatar {
+    background: #f3e5f5;
+    color: #7b1fa2;
+  }
+  
+  /* Mensagem */
+  .message {
+    max-width: 70%;
+    padding: 15px 20px;
+    border-radius: 12px;
+    position: relative;
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+  
+  .user .message {
+    background: #1976d2;
+    color: white;
+    border-top-right-radius: 0;
+  }
+  
+  .bot .message {
+    background: #f5f5f5;
+    color: #333;
+    border-top-left-radius: 0;
+  }
+  
+  /* Horário da mensagem */
+  .message-time {
+    position: absolute;
+    bottom: 2px;
+    right: 8px;
+    font-size: 0.7rem;
+    opacity: 0.7;
+  }
+  
+  /* Área de entrada */
+  .input-area {
+    padding: 12px;
+    background: #f9f9f9;
+    border-top: 1px solid #eee;
+    display: flex;
+    gap: 8px;
+  }
+  
+  .message-input {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    resize: none;
+    min-height: 40px;
+    max-height: 100px;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+  
+  .message-input:focus {
+    border-color: #1976d2;
+  }
+  
+  /* Botão de enviar */
+  .send-button {
+    background: #1976d2;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0 16px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s;
+  }
+  
+  .send-button:hover {
+    background: #1565c0;
+  }
+  
+  .send-button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+  }

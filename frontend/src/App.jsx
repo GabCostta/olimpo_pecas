@@ -14,10 +14,12 @@ import CriarFormulario from "@pages/CriarFormularioPage/CriarFormularioPage"
 import PedidosPage from "@pages/PedidosPage/PedidosPage"
 import Informacoes from "@pages/InformacoesPage/InformacoesPage"
 import Error from "@pages/Error404/Error404"
+import FloatingChat from "@components/FloatingChat/FloatingChat";
 
 function App() {
   return (
     <Router>
+      <FloatingChat />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="ProductList/" element={<ProductList />} />
