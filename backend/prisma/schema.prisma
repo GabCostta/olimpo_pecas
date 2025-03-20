@@ -13,8 +13,29 @@ generator erd {
 
 model User {
   id        Int     @id @default(autoincrement())
-  name      String
+  nome      String
   email     String  @unique
-  password  String
+  senha     String
+  papel      String  @default("cliente") // "cliente" ou "vendedor"
   createdAt DateTime @default(now())
+  carts     Cart[]
+}
+
+model Produto {
+  id          Int     @id @default(autoincrement())
+  name        String
+  descricao   String
+  preco       Float
+  createdAt   DateTime @default(now())
+  carts       Cart[]
+}
+
+model Cart {
+  id         Int     @id @default(autoincrement())
+  userId     Int
+  user       User    @relation(fields: [userId], references: [id])
+  produtoId  Int
+  produto    Produto @relation(fields: [produtoId], references: [id])
+  quantidade Int
+  createdAt  DateTime @default(now())
 }
