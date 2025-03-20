@@ -8,7 +8,7 @@
   
   /* Botão para abrir/fechar o chat */
   .chat-toggle-button {
-    background: #1976d2;
+    background: #f6aa1c;
     color: white;
     border: none;
     border-radius: 50%;
@@ -24,7 +24,7 @@
   }
   
   .chat-toggle-button:hover {
-    background: #1565c0;
+    background: #eca31c;
     transform: scale(1.1);
   }
   
@@ -44,7 +44,7 @@
   /* Cabeçalho do chat */
   .chat-header {
     padding: 16px;
-    background: #1976d2;
+    background: #f6aa1c;
     color: white;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   }
@@ -99,11 +99,11 @@
     justify-content: center;
     font-size: 1rem;
     background: #e3f2fd;
-    color: #1976d2;
+    color: #f6aa1c;
   }
   
   .user .avatar {
-    background: #1976d2;
+    background: #f6aa1c;
     color: white;
   }
   
@@ -123,7 +123,7 @@
   }
   
   .user .message {
-    background: #1976d2;
+    background: #f6aa1c;
     color: white;
     border-top-right-radius: 0;
   }
@@ -166,12 +166,12 @@
   }
   
   .message-input:focus {
-    border-color: #1976d2;
+    border-color: #f6aa1c;
   }
   
   /* Botão de enviar */
   .send-button {
-    background: #1976d2;
+    background: #f6aa1c;
     color: white;
     border: none;
     border-radius: 8px;
@@ -185,7 +185,7 @@
   }
   
   .send-button:hover {
-    background: #1565c0;
+    background: #eca31c;
   }
   
   .send-button:disabled {
