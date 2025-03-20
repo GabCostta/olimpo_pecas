@@ -42,7 +42,7 @@ const FloatingChat = () => {
   return (
     <div className="floating-chat-container">
       <button className="chat-toggle-button" onClick={() => setIsOpen(!isOpen)}>
-        {isOpen ? "✖" : "💬"}
+        {isOpen ? "❌" : "💬"}
       </button>
 
       {isOpen && (
