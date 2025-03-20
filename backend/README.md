@@ -12,6 +12,8 @@ Este repositório contém a API do projeto **Olimpo Peças**, desenvolvida em **
 - **PostgreSQL** - Banco de dados relacional
 - **Dotenv** - Gerenciamento de variáveis de ambiente
 - **CORS** - Middleware para permitir requisições de origens diferentes
+- **Flask** - Framework web para Python
+- **langchain** - Framework para desenvolvimento de aplicações de cadeia de transformação de linguagem
 
 ---
 
@@ -54,6 +56,25 @@ O backend estará rodando em `http://localhost:3000`.
 
 ---
 
+### 📦 Integração Python
+1. **Acesse o diretório do backend**
+```sh
+cd olimpo_pecas/backend
+```
+
+2. **Instale as dependências Python**
+```sh
+pip install -r requirements.txt
+```
+
+3. **Configurar o ambiente**
+   - Crie uma API no site da groqcloud
+
+4. **Iniciar o servidor Flask**
+```sh
+python server.py
+```
+
 ## 📜 Estrutura do Projeto
 
 ```
@@ -73,6 +94,8 @@ backend/
 │
 ├── .env                 # Configuração do ambiente
 ├── package.json         # Dependências do projeto
+├── requirements.txt     # Dependências Python
+├── server.py            # Configuração principal do Python
 ├── README.md            # Documentação
 ```
 
