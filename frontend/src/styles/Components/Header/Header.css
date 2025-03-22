@@ -95,10 +95,6 @@ nav a img {
     height: auto;
 }
 
-.link-carrinho-nav:hover {
-    transform: scale(1.2);
-}
-
 .nav-footer {
     display: flex;
     align-items: flex-end;
@@ -136,6 +132,30 @@ nav a img {
     transition: 0.4s;
 }
 
+.carrinho-container {
+    position: relative;
+  }
+  
+  .icon-carrinho {
+    width: 40px;  /* Tamanho do ícone do carrinho */
+    height: 40px;
+  }
+  
+.quantidade-carrinho {
+    position: absolute;
+    top: 48px;  /* Ajuste a posição do círculo */
+    right: 77px;  /* Ajuste a posição do círculo */
+    background-color: var(--primary);  /* Cor de fundo do círculo */
+    color: white;
+    width: 20px;  /* Tamanho do círculo */
+    height: 20px;
+    border-radius: 50%;  /* Torna o elemento circular */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;  /* Tamanho da fonte do número */
+} 
+
 @media (max-width: 768px) {
     header {
         padding-left: 1rem;
@@ -159,6 +179,14 @@ nav a img {
     .hamburger {
         display: flex;
     }
+}
+
+.quantidade-carrinho {
+    top: 50px;  /* Ajuste para telas menores */
+    right: 38px;  /* Ajuste para telas menores */
+    width: 18px;  /* Reduza o tamanho do círculo em telas menores */
+    height: 18px;  /* Reduza o tamanho do círculo em telas menores */
+    font-size: 10px;  /* Reduza o tamanho da fonte em telas menores */
 }
 
 .nav-footer.active {
