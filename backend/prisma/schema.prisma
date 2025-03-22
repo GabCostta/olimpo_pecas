@@ -39,3 +39,10 @@ model Cart {
   quantidade Int
   createdAt  DateTime @default(now())
 }
+
+model Order {
+  id        String   @id @default(uuid()) @db.Uuid
+  items     String
+  total     Float
+  createdAt DateTime @default(now())
+}
