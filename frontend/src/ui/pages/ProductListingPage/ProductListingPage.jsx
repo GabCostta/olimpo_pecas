@@ -64,6 +64,10 @@ function ProductListingPage() {
                     <input className="input-filtrar-por check" type="checkbox" name="check-mark5" />
                     <label className="label-filtrar-por" htmlFor="check-mark5">TRW</label>{/*props*/}
                   </div>
+                  <div className="inputs-filtrar-por">
+                    <input className="input-filtrar-por check" type="checkbox" name="check-mark6" />
+                    <label className="label-filtrar-por" htmlFor="check-mark6">Outros</label>{/*props*/}
+                  </div>
                 </div>
                 <div className="topico-categoria">
                   <h1>Categoria</h1>
@@ -86,6 +90,10 @@ function ProductListingPage() {
                   <div className="inputs-filtrar-por">
                     <input className="input-filtrar-por check" type="checkbox" name="check-mark" />
                     <label className="label-filtrar-por" htmlFor="check-mark">Elétrica</label>{/*props*/}
+                  </div>
+                  <div className="inputs-filtrar-por">
+                    <input className="input-filtrar-por check" type="checkbox" name="check-mark" />
+                    <label className="label-filtrar-por" htmlFor="check-mark">Todos</label>{/*props*/}
                   </div>
                 </div>
                 <div className="topico-genero">
@@ -115,6 +123,8 @@ function ProductListingPage() {
                   </div>
                 </div>
               </div>
+              <button type="button" className="btn-filtrar" >
+                    <a href="#">Buscar</a> </button>
             </div>
             <div className="card-product-list">
               <div className="produto-em-alta-cards">

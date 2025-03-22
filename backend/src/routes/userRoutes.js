@@ -5,81 +5,81 @@ import bcrypt from "bcrypt";
 const router = express.Router();
 const prisma = new PrismaClient();
 
-// Criar um novo usuário (Cliente ou Vendedor)
+// Criar um novo usuário (Cliente ou Vendedor), feito pelo Nicolas.
 router.post("/", async (req, res) => {
-  try {
-    const { nome, email, senha, papel } = req.body;
+    try {
+        const { nome, email, senha, papel } = req.body;
 
-    // Hash da senha para segurança
-    const senhaHash = await bcrypt.hash(senha, 10);
+        // Hash da senha para segurança
+        const senhaHash = await bcrypt.hash(senha, 10);
 
-    const novoUsuario = await prisma.user.create({
-      data: { nome, email, senha: senhaHash, papel },
-    });
+        const novoUsuario = await prisma.user.create({
+            data: { nome, email, senha: senhaHash, papel },
+        });
 
-    res.json(novoUsuario);
-  } catch (error) {
-    res.status(500).json({ error: "Erro ao criar usuário" });
-  }
+        res.json(novoUsuario);
+    } catch (error) {
+        res.status(500).json({ error: "Erro ao criar usuário" });
+    }
 });
 
 // Listar todos os usuários
 router.get("/", async (req, res) => {
-  try {
-    const usuarios = await prisma.user.findMany();
-    res.json(usuarios);
-  } catch (error) {
-    res.status(500).json({ error: "Erro ao buscar usuários" });
-  }
+    try {
+        const usuarios = await prisma.user.findMany();
+        res.json(usuarios);
+    } catch (error) {
+        res.status(500).json({ error: "Erro ao buscar usuários" });
+    }
 });
 
 // Buscar usuário por ID
 router.get("/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    const usuario = await prisma.user.findUnique({ where: { id: parseInt(id) } });
+    try {
+        const { id } = req.params;
+        const usuario = await prisma.user.findUnique({ where: { id: parseInt(id) } });
 
-    if (!usuario) {
-      return res.status(404).json({ error: "Usuário não encontrado" });
+        if (!usuario) {
+            return res.status(404).json({ error: "Usuário não encontrado" });
+        }
+
+        res.json(usuario);
+    } catch (error) {
+        res.status(500).json({ error: "Erro ao buscar usuário" });
     }
-
-    res.json(usuario);
-  } catch (error) {
-    res.status(500).json({ error: "Erro ao buscar usuário" });
-  }
 });
 
 // Atualizar dados de um usuário
 router.put("/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { nome, email, senha, papel } = req.body;
+    try {
+        const { id } = req.params;
+        const { nome, email, senha, papel } = req.body;
 
-    // Atualizar senha apenas se for fornecida
-    const dataAtualizada = senha
-      ? { nome, email, senha: await bcrypt.hash(senha, 10), papel }
-      : { nome, email, papel };
+        // Atualizar senha apenas se for fornecida
+        const dataAtualizada = senha
+            ? { nome, email, senha: await bcrypt.hash(senha, 10), papel }
+            : { nome, email, papel };
 
-    const usuarioAtualizado = await prisma.user.update({
-      where: { id: parseInt(id) },
-      data: dataAtualizada,
-    });
+        const usuarioAtualizado = await prisma.user.update({
+            where: { id: parseInt(id) },
+            data: dataAtualizada,
+        });
 
-    res.json(usuarioAtualizado);
-  } catch (error) {
-    res.status(500).json({ error: "Erro ao atualizar usuário" });
-  }
+        res.json(usuarioAtualizado);
+    } catch (error) {
+        res.status(500).json({ error: "Erro ao atualizar usuário" });
+    }
 });
 
 // Deletar usuário por ID
 router.delete("/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    await prisma.user.delete({ where: { id: parseInt(id) } });
-    res.json({ message: "Usuário removido com sucesso" });
-  } catch (error) {
-    res.status(500).json({ error: "Erro ao deletar usuário" });
-  }
+    try {
+        const { id } = req.params;
+        await prisma.user.delete({ where: { id: parseInt(id) } });
+        res.json({ message: "Usuário removido com sucesso" });
+    } catch (error) {
+        res.status(500).json({ error: "Erro ao deletar usuário" });
+    }
 });
 
 export default router;

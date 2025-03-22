@@ -38,6 +38,7 @@ nav a img {
     align-items: center;
 }
 
+
 .nav-header input {
     width: 38.81vw;
     height: 06.66vh;
@@ -61,6 +62,7 @@ nav a img {
     font-size: 1rem;
     cursor: pointer;
     transition: 0.5s ease;
+    text-decoration: none;
 }
 
 .link-cadastro:hover {
@@ -96,16 +98,20 @@ nav a img {
     height: auto;
 }
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> teste
 .nav-footer {
     display: flex;
-    align-items: flex-end;
-    justify-content: flex-end;
+    align-items: center;
+    justify-content: center;
     list-style: none;
     gap: 2.7rem;
     font-family: var(--font_primaria);
     font-weight: var(--font_weight_normal);
+    padding: 10px 0;
 }
 
 .nav-footer a {
@@ -136,6 +142,7 @@ nav a img {
 }
 
 .carrinho-container {
+<<<<<<< HEAD
   position: relative;
 }
 
@@ -159,6 +166,30 @@ nav a img {
   font-size: 12px;  /* Tamanho da fonte do número */
 }
 
+=======
+    position: relative;
+  }
+  
+  .icon-carrinho {
+    width: 40px;  /* Tamanho do ícone do carrinho */
+    height: 40px;
+  }
+  
+.quantidade-carrinho {
+    position: absolute;
+    top: 48px;  /* Ajuste a posição do círculo */
+    right: 77px;  /* Ajuste a posição do círculo */
+    background-color: var(--primary);  /* Cor de fundo do círculo */
+    color: white;
+    width: 20px;  /* Tamanho do círculo */
+    height: 20px;
+    border-radius: 50%;  /* Torna o elemento circular */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;  /* Tamanho da fonte do número */
+} 
+>>>>>>> teste
 
 @media (max-width: 768px) {
     header {
@@ -190,6 +221,14 @@ nav a img {
         height: 18px;  /* Reduza o tamanho do círculo em telas menores */
         font-size: 10px;  /* Reduza o tamanho da fonte em telas menores */
     }
+}
+
+.quantidade-carrinho {
+    top: 50px;  /* Ajuste para telas menores */
+    right: 38px;  /* Ajuste para telas menores */
+    width: 18px;  /* Reduza o tamanho do círculo em telas menores */
+    height: 18px;  /* Reduza o tamanho do círculo em telas menores */
+    font-size: 10px;  /* Reduza o tamanho da fonte em telas menores */
 }
 
 .nav-footer.active {

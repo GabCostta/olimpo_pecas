@@ -7,7 +7,11 @@ import { Link } from "react-router-dom";
 function Header() {
   const [quantidade, setQuantidade] = useState(0);
 
+<<<<<<< HEAD
   // Função para calcular o número de itens no carrinho
+=======
+  // Função para calcular o número de itens no carrinho, feita pelo Nicolas.
+>>>>>>> teste
   const calcularQuantidade = () => {
     const savedCart = JSON.parse(localStorage.getItem('cart') || '[]');
     const totalQuantity = savedCart.reduce((acc, item) => acc + item.quantity, 0);
@@ -31,18 +35,22 @@ function Header() {
               <Link className="link-carrinho-nav" to="/Cart">
                 <img src={carrinho} alt="carrinho" className="icon-carrinho" />
                 {
+<<<<<<< HEAD
                   <div className="quantidade-carrinho">{quantidade}</div> 
+=======
+                  <div className="quantidade-carrinho">{quantidade}</div>
+>>>>>>> teste
                 }
               </Link>
             </div>
-            <div className="nav-footer">
+          </div>
+        </nav>
+        <div className="nav-footer">
               <li><Link to="/" className="nav-footer-home">Home</Link></li>
               <li><Link to="/ProductList" className="nav-footer-produtos">Produtos</Link></li>
               <li><Link to="/ProductView" className="nav-footer-categorias">Categorias</Link></li>
               <li><Link to="/Cart" className="nav-footer-pedidos">Carrinho</Link></li>
             </div>
-          </div>
-        </nav>
       </header>
     </>
   );

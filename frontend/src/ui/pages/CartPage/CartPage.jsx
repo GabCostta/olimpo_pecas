@@ -77,7 +77,9 @@ const removeItem = (itemId, cartItems, setCartItems) => {
 
 function CartSummary({ cartItems, shipping, discountApplied }) {
   const total = cartItems.reduce((acc, item) => {
-    const price = isNaN(item.valoratual) ? 0 : parseFloat(item.valoratual.toString().replace(',', '.'));
+    const price = isNaN(item.valoratual)
+      ? 0
+      : parseFloat(item.valoratual.toString().replace(',', '.'));
     return acc + price * item.quantity;
   }, 0);
 
@@ -96,7 +98,9 @@ function CartSummary({ cartItems, shipping, discountApplied }) {
         <p>
           Total:{" "}
           <span className="total-price">
-            {totalWithDiscount === 0 ? "R$ 0,00" : `R$ ${Math.max(totalWithDiscount, 0).toFixed(2)}`}
+            {totalWithDiscount === 0
+              ? "R$ 0,00"
+              : `R$ ${Math.max(totalWithDiscount, 0).toFixed(2)}`}
           </span>
         </p>
         {totalWithDiscount > 200 && (
@@ -139,6 +143,34 @@ function CartPage() {
     }
   };
 
+  // Função para finalizar a compra e registrar o pedido no backend, Feita pelo Caio.
+  const finalizePurchase = async () => {
+    if (cartItems.length === 0) {
+      alert("Seu carrinho está vazio!");
+      return;
+    }
+    // Calcula o total (produto + frete)
+    const total = cartItems.reduce((acc, item) => {
+      const price = isNaN(item.valoratual)
+        ? 0
+        : parseFloat(item.valoratual.toString().replace(',', '.'));
+      return acc + price * item.quantity;
+    }, 0) + shipping;
+
+    try {
+      const response = await axios.post("http://localhost:3001/orders", {
+        items: cartItems,
+        total: total,
+      });
+      alert("Compra finalizada com sucesso!");
+      setCartItems([]);
+      localStorage.removeItem("cart");
+    } catch (error) {
+      console.error("Erro ao finalizar a compra:", error);
+      alert("Erro ao finalizar a compra. Tente novamente.");
+    }
+  };
+
   useEffect(() => {
     const savedCart = JSON.parse(localStorage.getItem("cart") || "[]");
     setCartItems(savedCart);
@@ -151,7 +183,7 @@ function CartPage() {
         setCharacter(response.data);
         console.log("API response:", response.data);
       } catch (error) {
-        console.log('Erro: ${error}');
+        console.log(`Erro: ${error}`);
       }
     };
     fetchData();
@@ -199,6 +231,8 @@ function CartPage() {
               {errorMessage && <p className="error-message">{errorMessage}</p>} {/* Exibe a mensagem de erro */}
             </div>
           </section>
+          {/* Botão de Finalizar Compra*/}
+          <button className="finalize-purchase" onClick={finalizePurchase}>Finalizar Compra</button>
         </div>
         <CartSummary cartItems={cartItems} shipping={shipping} discountApplied={discountApplied} />
       </div>
