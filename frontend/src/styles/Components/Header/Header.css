@@ -37,6 +37,7 @@ nav a img {
     align-items: center;
 }
 
+
 .nav-header input {
     width: 38.81vw;
     height: 06.66vh;
@@ -60,6 +61,7 @@ nav a img {
     font-size: 1rem;
     cursor: pointer;
     transition: 0.5s ease;
+    text-decoration: none;
 }
 
 .link-cadastro:hover {
@@ -101,12 +103,13 @@ nav a img {
 
 .nav-footer {
     display: flex;
-    align-items: flex-end;
-    justify-content: flex-end;
+    align-items: center;
+    justify-content: center;
     list-style: none;
     gap: 2.7rem;
     font-family: var(--font_primaria);
     font-weight: var(--font_weight_normal);
+    padding: 10px 0;
 }
 
 .nav-footer a {
