@@ -98,11 +98,6 @@ nav a img {
     height: auto;
 }
 
-<<<<<<< HEAD
-
-
-=======
->>>>>>> teste
 .nav-footer {
     display: flex;
     align-items: center;
@@ -142,31 +137,6 @@ nav a img {
 }
 
 .carrinho-container {
-<<<<<<< HEAD
-  position: relative;
-}
-
-.icon-carrinho {
-  width: 40px;  /* Tamanho do ícone do carrinho */
-  height: 40px;
-}
-
-.quantidade-carrinho {
-  position: absolute;
-  top: 48px;  /* Ajuste a posição do círculo */
-  right: 77px;  /* Ajuste a posição do círculo */
-  background-color: var(--primary);  /* Cor de fundo do círculo */
-  color: white;
-  width: 20px;  /* Tamanho do círculo */
-  height: 20px;
-  border-radius: 50%;  /* Torna o elemento circular */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 12px;  /* Tamanho da fonte do número */
-}
-
-=======
     position: relative;
   }
   
@@ -189,7 +159,6 @@ nav a img {
     align-items: center;
     font-size: 12px;  /* Tamanho da fonte do número */
 } 
->>>>>>> teste
 
 @media (max-width: 768px) {
     header {
