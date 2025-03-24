@@ -39,7 +39,7 @@
   display: block;
   width: 100%;
   padding: 10px;
-  background-color: #007bff;
+  background-color:  #ffc107;
   color: white;
   border: none;
   border-radius: 4px;
@@ -48,5 +48,5 @@
 }
 
 .product-form button:hover {
-  background-color: #0056b3;
+  background-color: #080808;
 }

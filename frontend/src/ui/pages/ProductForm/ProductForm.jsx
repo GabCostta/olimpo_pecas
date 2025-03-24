@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import "@styles/Components/ProductForm/ProductForm.css";
+import "@styles/pages/ProductForm/ProductForm.css";
+import Layout from "@components/Layout/Layout.jsx";
 
 function ProductForm() {
   const [product, setProduct] = useState({
@@ -27,6 +28,7 @@ function ProductForm() {
   };
 
   return (
+    <Layout>
     <form onSubmit={handleSubmit} className="product-form">
       <h2>Criar Novo Produto</h2>
       <label>
@@ -100,6 +102,7 @@ function ProductForm() {
       )}
       <button type="submit">Criar Produto</button>
     </form>
+    </Layout>
   );
 }
 

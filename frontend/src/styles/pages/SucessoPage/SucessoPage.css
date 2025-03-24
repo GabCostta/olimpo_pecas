@@ -1,0 +1,16 @@
+.sucesso-container {
+    text-align: center;
+    padding: 20px;
+}
+
+.payment-details {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+.qr-code, .barcode {
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+}
