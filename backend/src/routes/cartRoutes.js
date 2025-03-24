@@ -20,11 +20,13 @@ import express from "express";
  // Listar os itens do carrinho de um usuário
  router.get("/:userId", async (req, res) => {
    try {
-     const { userId } = req.params;
-     const carrinho = await prisma.cart.findMany({
-       where: { userId: parseInt(userId) },
-       include: { produto: true },
-     });
+    const userId = Number(req.params.userId);
+    if (isNaN(userId)) {
+      return res.status(400).json({ error: "ID do usuário inválido" });
+    }
+    const carrinho = await prisma.cart.findMany({
+      where: { userId },
+    });
      res.json(carrinho);
    } catch (error) {
      res.status(500).json({ error: "Erro ao buscar o carrinho" });
