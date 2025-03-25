@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Layout from "@components/Layout/Layout";
 import Cards2 from "@components/Cards/Cards2";
 import Cards from "@components/Cards/Cards";
+import CheckoutPage from "@pages/CheckoutPage/CheckoutPage";
 import farol from "@assets/img/farol.png";
 import axios from "axios";
 import flechaRosa from "@assets/img/flecha_icon.svg";
@@ -78,22 +79,24 @@ const removeItem = (itemId, cartItems, setCartItems) => {
 };
 
 function CartSummary({ cartItems, shipping, discountApplied, onCheckout }) {
-  const total = cartItems.reduce((acc, item) => {
-    const price = isNaN(item.valoratual) ? 0 : parseFloat(item.valoratual.toString().replace(',', '.'));
+  // Cálculo dentro do componente para garantir consistência
+  const subtotal = cartItems.reduce((acc, item) => {
+    const price = isNaN(item.valoratual)
+      ? 0
+      : parseFloat(item.valoratual.toString().replace(",", "."));
     return acc + price * item.quantity;
   }, 0);
 
-  // O desconto é aplicado sobre a soma do valor dos produtos com o frete
-  const totalWithShipping = total + shipping;
-  const discount = discountApplied ? totalWithShipping * 0.1 : 0; // Calcula 10% de desconto
-  const totalWithDiscount = totalWithShipping - discount; // Subtrai o desconto
+  const totalWithShipping = subtotal + shipping;
+  const discount = discountApplied ? totalWithShipping * 0.1 : 0;
+  const total = totalWithShipping - discount;
 
   return (
     <div className="cart-summary">
       <h2>RESUMO</h2>
       <div className="summary-details">
         <p>
-          Subtotal: <span>R$ {total.toFixed(2)}</span>
+          Subtotal: <span>R$ {subtotal.toFixed(2)}</span>
         </p>
         <p>
           Frete: <span>R$ {shipping.toFixed(2)}</span>
@@ -104,22 +107,20 @@ function CartSummary({ cartItems, shipping, discountApplied, onCheckout }) {
         <p>
           Total:{" "}
           <span className="total-price">
-            {totalWithDiscount === 0
-              ? "R$ 0,00"
-              : `R$ ${Math.max(totalWithDiscount, 0).toFixed(2)}`}
+            {total === 0 ? "R$ 0,00" : `R$ ${Math.max(total, 0).toFixed(2)}`}
           </span>
         </p>
-        {totalWithDiscount > 200 && (
+        {total > 200 && (
           <p className="installments">
-            ou 10x de R$ {(totalWithDiscount / 10).toFixed(2)} sem juros
+            ou 10x de R$ {(total / 10).toFixed(2)} sem juros
           </p>
         )}
-        {totalWithDiscount <= 200 && totalWithDiscount !== 0 && (
+        {total <= 200 && total !== 0 && (
           <p className="installments">
             Adicione mais itens para aproveitar o desconto!
           </p>
         )}
-        {totalWithDiscount === 0 && (
+        {total === 0 && (
           <p className="installments">Seu carrinho está vazio.</p>
         )}
       </div>
@@ -160,24 +161,44 @@ function CartPage() {
       alert("Seu carrinho está vazio!");
       return;
     }
-
-    // Redireciona para a página de checkout
-    navigate("/Checkout");
+  
+    // Cálculo consistente com o CartSummary
+    const subtotal = cartItems.reduce((acc, item) => {
+      const price = isNaN(item.valoratual)
+        ? 0
+        : parseFloat(item.valoratual.toString().replace(",", "."));
+      return acc + price * item.quantity;
+    }, 0);
+  
+    const totalWithShipping = subtotal + shipping;
+    const discountValue = discountApplied ? totalWithShipping * 0.1 : 0;
+    const total = totalWithShipping - discountValue;
+  
+    navigate("/Checkout", {
+      state: {
+        subtotal,
+        shipping,
+        discount: discountValue,
+        total,
+        cartItems
+      }
+    });
   };
 
-  // Função para finalizar a compra e registrar o pedido no backend, Feita pelo Caio.
+  // Função para finalizar a compra e registrar o pedido no backend
   const finalizePurchase = async () => {
     if (cartItems.length === 0) {
       alert("Seu carrinho está vazio!");
       return;
     }
     // Calcula o total (produto + frete)
-    const total = cartItems.reduce((acc, item) => {
-      const price = isNaN(item.valoratual)
-        ? 0
-        : parseFloat(item.valoratual.toString().replace(',', '.'));
-      return acc + price * item.quantity;
-    }, 0) + shipping;
+    const total =
+      cartItems.reduce((acc, item) => {
+        const price = isNaN(item.valoratual)
+          ? 0
+          : parseFloat(item.valoratual.toString().replace(",", "."));
+        return acc + price * item.quantity;
+      }, 0) + shipping;
 
     try {
       const response = await axios.post("http://localhost:3001/orders", {
@@ -207,11 +228,23 @@ function CartPage() {
         setCharacter(response.data);
         console.log("API response:", response.data);
       } catch (error) {
-        console.log('Erro: ${error}');
+        console.log("Erro: ${error}");
       }
     };
     fetchData();
   }, []);
+
+  // Cálculos movidos para antes do return
+  const total = cartItems.reduce((acc, item) => {
+    const price = isNaN(item.valoratual)
+      ? 0
+      : parseFloat(item.valoratual.toString().replace(",", "."));
+    return acc + price * item.quantity;
+  }, 0);
+
+  const totalWithShipping = total + shipping;
+  const discount = discountApplied ? totalWithShipping * 0.1 : 0;
+  const totalWithDiscount = totalWithShipping - discount;
 
   return (
     <Layout>
@@ -268,7 +301,9 @@ function CartPage() {
             </div>
           </section>
           {/* Botão de Finalizar Compra*/}
-          <button className="finalize-purchase" onClick={finalizePurchase}>Finalizar Compra</button>
+          <button className="finalize-purchase" onClick={finalizePurchase}>
+            Finalizar Compra
+          </button>
         </div>
         <CartSummary
           cartItems={cartItems}

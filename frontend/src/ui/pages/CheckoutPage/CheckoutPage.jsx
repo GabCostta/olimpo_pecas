@@ -1,9 +1,20 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import "@styles/pages/CheckoutPage/CheckoutPage.css";
-import Layout from "@components/Layout/Layout.jsx";// Caminho ajustado conforme necessário
+import Layout from "@components/Layout/Layout.jsx";
+import PropTypes from 'prop-types';
 
 function CheckoutPage() {
+  const location = useLocation();
+  const fallbackData = JSON.parse(localStorage.getItem('checkoutData')) || {};
+  const { 
+    subtotal = 0,
+    shipping = 0,
+    discount = 0,
+    total = 0,
+    cartItems = []
+  } = location.state || fallbackData;
+  
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [selectedPayment, setSelectedPayment] = useState("");
   const [selectedAddress, setSelectedAddress] = useState("");
@@ -164,22 +175,25 @@ function CheckoutPage() {
 
         {/* Resumo da Compra */}
         <section className="summary-section">
-          <h2>Resumo da Compra</h2>
-          <div className="summary-details">
+        <h2>Resumo da Compra</h2>
+        <div className="summary-details">
+          <p>
+            Subtotal ({cartItems.length} itens): 
+            <span> R$ {subtotal.toFixed(2)}</span>
+          </p>
+          <p>
+            Frete: <span>R$ {shipping.toFixed(2)}</span>
+          </p>
+          {discount > 0 && (
             <p>
-              Total dos Produtos: <span>R$682,58</span>
+              Desconto: <span>-R$ {discount.toFixed(2)}</span>
             </p>
-            <p>
-              Total do Frete: <span>R$209,78</span>
-            </p>
-            <p>
-              Cupom de Desconto: <span>-R$1,95</span>
-            </p>
-            <p className="total">
-              Total: <span>R$890,41</span>
-            </p>
-          </div>
-        </section>
+          )}
+          <p className="total">
+            Total: <span>R$ {total.toFixed(2)}</span>
+          </p>
+        </div>
+      </section>
 
         <button
           className="finalizar-compra-button"
@@ -191,5 +205,17 @@ function CheckoutPage() {
     </Layout>
   );
 }
+
+
+CheckoutPage.propTypes = {
+  location: PropTypes.shape({
+    state: PropTypes.shape({
+      subtotal: PropTypes.number,
+      shipping: PropTypes.number,
+      discount: PropTypes.number,
+      total: PropTypes.number
+    })
+  })
+};
 
 export default CheckoutPage;
