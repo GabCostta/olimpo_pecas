@@ -3,28 +3,19 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import { PrismaClient } from "@prisma/client";
-<<<<<<< HEAD
-=======
 import userRoutes from "./src/routes/userRoutes.js";
 import productRoutes from "./src/routes/productRoutes.js";
 import cartRoutes from "./src/routes/cartRoutes.js";
 import orderRoutes from "./src/routes/orderRoutes.js";
->>>>>>> 4212077db5018b4346fda02ce39e1289008c73fb
 
 dotenv.config();
 
 const prisma = new PrismaClient();
 const app = express();
-const prisma = new PrismaClient();
 
 app.use(cors());
 app.use(express.json());
 
-<<<<<<< HEAD
-// Rota de registro (registrar)
-app.post("/registrar", async (req, res) => {
-    const { email, nome } = req.body;
-=======
 // Rotas
 app.use("/users", userRoutes);
 app.use("/produtos", productRoutes);
@@ -35,7 +26,8 @@ app.get("/", (req, res) => {
     res.send("Servidor está rodando corretamente!");
 });
 
->>>>>>> 4212077db5018b4346fda02ce39e1289008c73fb
+app.post("/create-user", async (req, res) => {
+    const { email, nome } = req.body;
 
     try {
         // Verificar se o usuário já existe

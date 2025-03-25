@@ -5,11 +5,6 @@ import bcrypt from "bcrypt";
 const router = express.Router();
 const prisma = new PrismaClient();
 
-<<<<<<< HEAD
-router.get("/", getUsers);
-router.post("/", createUser);
-router.post("/registrar", registrar);
-=======
 // Criar um novo usuário (Cliente ou Vendedor), feito pelo Nicolas.
 router.post("/", async (req, res) => {
     try {
@@ -86,6 +81,5 @@ router.delete("/:id", async (req, res) => {
         res.status(500).json({ error: "Erro ao deletar usuário" });
     }
 });
->>>>>>> 4212077db5018b4346fda02ce39e1289008c73fb
 
 export default router;
