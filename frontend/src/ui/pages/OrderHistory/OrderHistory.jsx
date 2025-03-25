@@ -6,10 +6,30 @@ function OrderHistory() {
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
-    // Aqui você pode buscar os pedidos do backend ou de localStorage
-    const savedOrders = JSON.parse(localStorage.getItem("orders") || "[]");
-    setOrders(savedOrders);
+    fetch("http://localhost:3001/orders")
+      .then(response => response.json())
+      .then(data => {
+        const parsedOrders = data.map(order => ({
+          ...order,
+          items: parseItems(order.items),
+        }));
+        setOrders(parsedOrders);
+      })
+      .catch(error => console.error("Erro ao buscar pedidos:", error));
   }, []);
+
+  // Função para garantir que `items` seja um array
+  function parseItems(items) {
+    if (!items) return [];
+    if (Array.isArray(items)) return items;
+    try {
+      const parsed = JSON.parse(items);
+      return Array.isArray(parsed) ? parsed : []; // Garante que seja array
+    } catch (error) {
+      console.error("Erro ao converter JSON de items:", error);
+      return [];
+    }
+  }
 
   return (
     <Layout>
@@ -20,11 +40,11 @@ function OrderHistory() {
         ) : (
           <ul>
             {orders.map((order, index) => (
-              <li key={index}>
+              <li key={order.id}>
                 <h3>Pedido #{index + 1}</h3>
-                <p>Total: R$ {order.total.toFixed(2)}</p>
+                <p>Total: R$ {order.total?.toFixed(2)}</p>
                 <ul>
-                  {order.items.map((item, i) => (
+                  {(order.items || []).map((item, i) => (
                     <li key={i}>
                       {item.titulo} - {item.quantity}x R$ {item.valoratual}
                     </li>
