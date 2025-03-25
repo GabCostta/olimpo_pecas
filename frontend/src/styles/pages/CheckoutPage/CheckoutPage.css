@@ -1,0 +1,130 @@
+/* CheckoutPage.css */
+.checkout-page {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 1rem;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.checkout-page h1 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 2rem;
+}
+
+.address-section,
+.payment-section,
+.summary-section {
+  margin-bottom: 2rem;
+}
+
+.address-section h2,
+.payment-section h2,
+.summary-section h2 {
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.address-option,
+.payment-option {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.address-option input,
+.payment-option input {
+  margin-right: 0.5rem;
+}
+
+.address-option label,
+.payment-option label {
+  font-size: 1rem;
+  color: #555;
+}
+
+.add-address-button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+
+.add-address-button:hover {
+  background-color: #0056b3;
+}
+
+.payment-form {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.payment-form h3 {
+  font-size: 1.25rem;
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.payment-form input {
+  width: 100%;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.summary-details {
+  background-color: #fff;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.summary-details p {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 0.5rem;
+}
+
+.summary-details .total {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.finalizar-compra-button {
+  width: 100%;
+  background-color: #f6aa1c;
+  color: #fff;
+  border: none;
+  padding: 1rem;
+  border-radius: 4px;
+  font-size: 1.25rem;
+  cursor: pointer;
+  margin-top: 2rem;
+}
+
+.finalizar-compra-button:hover {
+  background-color:#f6aa1c;
+}
+
+.login-link,
+.register-link {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.login-link:hover,
+.register-link:hover {
+  text-decoration: underline;
+}

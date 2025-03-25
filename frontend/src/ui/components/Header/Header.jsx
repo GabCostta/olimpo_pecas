@@ -7,44 +7,80 @@ import { Link } from "react-router-dom";
 function Header() {
   const [quantidade, setQuantidade] = useState(0);
 
-  // Função para calcular o número de itens no carrinho, feita pelo Nicolas.
   const calcularQuantidade = () => {
-    const savedCart = JSON.parse(localStorage.getItem('cart') || '[]');
-    const totalQuantity = savedCart.reduce((acc, item) => acc + item.quantity, 0);
+    const savedCart = JSON.parse(localStorage.getItem("cart") || "[]");
+    const totalQuantity = savedCart.reduce(
+      (acc, item) => acc + item.quantity,
+      0
+    );
     setQuantidade(totalQuantity);
   };
 
   useEffect(() => {
-    calcularQuantidade();  // Atualiza a quantidade ao carregar o componente
+    calcularQuantidade();
   }, []);
 
   return (
-    <>
-      <header>
-        <nav>
-          <div className="navs">
-            <div className="nav-header">
-              <Link to="/"><img src={logo} alt="logo" /></Link>
-              <input type="text" placeholder="Pesquisar produto..." className="input-icon-search" />
-              <Link className="link-cadastro" to="/Registrar">Cadastre-se</Link>
-              <button type="button"><Link to="/Login">Entrar</Link></button>
-              <Link className="link-carrinho-nav" to="/Cart">
-                <img src={carrinho} alt="carrinho" className="icon-carrinho" />
-                {
-                  <div className="quantidade-carrinho">{quantidade}</div>
-                }
-              </Link>
-            </div>
+    <header>
+      <nav className="header-nav">
+        <div className="nav-container">
+          {/* Logo */}
+          <Link to="/" className="logo-link">
+            <img src={logo} alt="logo" className="logo" />
+          </Link>
+
+          {/* Links de navegação */}
+          <div className="nav-links">
+            <Link to="/" className="nav-link">
+              Home
+            </Link>
+            <Link to="/ProductList" className="nav-link">
+              Produtos
+            </Link>
+            <Link to="/ProductView" className="nav-link">
+              Categorias
+            </Link>
+            <Link to="/CriarProduto" className="nav-link">
+              Cadastrar Produto
+            </Link>
+            <Link to="/CadastroCliente" className="nav-link">
+              Vendedor
+            </Link>
+            <Link to="/HistoricoPedidos" className="nav-link">
+              Histórico Pedidos
+            </Link>
           </div>
-        </nav>
-        <div className="nav-footer">
-              <li><Link to="/" className="nav-footer-home">Home</Link></li>
-              <li><Link to="/ProductList" className="nav-footer-produtos">Produtos</Link></li>
-              <li><Link to="/ProductView" className="nav-footer-categorias">Categorias</Link></li>
-              <li><Link to="/Cart" className="nav-footer-pedidos">Carrinho</Link></li>
-            </div>
-      </header>
-    </>
+
+          {/* Barra de pesquisa */}
+          <input
+            type="text"
+            placeholder="Pesquisar produto..."
+            className="input-search"
+          />
+
+          {/* Container para botões e carrinho */}
+<div className="auth-cart-container">
+  <div className="auth-buttons">
+    <Link to="/Registrar" className="auth-button cadastrar">
+      Cadastre-se
+    </Link>
+    <Link to="/Login" className="auth-button entrar">
+      Entrar
+    </Link>
+  </div>
+
+  {/* Carrinho */}
+  <Link to="/Cart" className="carrinho-link">
+    <img src={carrinho} alt="carrinho" className="icon-carrinho" />
+    {quantidade > 0 && (
+      <div className="quantidade-carrinho">{quantidade}</div>
+    )}
+  </Link>
+</div>
+
+        </div>
+      </nav>
+    </header>
   );
 }
 

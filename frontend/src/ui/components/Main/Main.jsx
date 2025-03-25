@@ -1,11 +1,37 @@
-// src/ui/Components/Main/Main.jsx
 import "@styles/Components/Main/Main.css";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 import logo from "@assets/img/logomain.png";
 import gmail from "@assets/img/gmail.svg";
 import facebook from "@assets/img/facebook.svg";
 
 function Main() {
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
+  const [erro, setErro] = useState("");
+  const navigate = useNavigate();
+
+  const handleLogin = async () => {
+    try {
+      const resposta = await axios.post("http://localhost:3001/login", {
+        email,
+        senha
+      });
+
+      localStorage.setItem("token", resposta.data.token);
+      alert("Login realizado com sucesso!");
+      
+      if (resposta.data.usuario.role === "vendedor") {
+        navigate("/dashboard-vendedor");
+      } else {
+        navigate("/home");
+      }
+    } catch (error) {
+      setErro(error.response?.data?.mensagem || "Erro ao fazer login.");
+    }
+  };
+
   return (
     <main className="main-login">
       <div className="formulario card-formulario">
@@ -15,28 +41,33 @@ function Main() {
         </div>
         <div className="conta">
           <h4>Login *</h4>
-          <input type="text" placeholder="Insira seu login ou email" />
+          <input
+            type="text"
+            placeholder="Insira seu login ou email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
           <h4>Senha *</h4>
-          <input type="password" placeholder="Insira sua senha" />
+          <input
+            type="password"
+            placeholder="Insira sua senha"
+            value={senha}
+            onChange={(e) => setSenha(e.target.value)}
+          />
           <Link to="/Error">Esqueci minha senha</Link>
-          <button type="button">Acessar Conta</button>
+          <button type="button" onClick={handleLogin}>
+            Acessar Conta
+          </button>
+          {erro && <p className="erro">{erro}</p>}
         </div>
         <div className="outrologin">
           <p>Ou faça login com</p>
           <div className="img">
-            <a
-              href="https://accounts.google.com/AccountChooser/signinchooser?service=merchants&continue=https%3A%2F%2Fmerchants.google.com%2Fmc%2Fproducts%2Fmethodselector%3Fa%3D719386599%26gtact%3D1&ddm=0&flowName=GlifWebSignIn&flowEntry=AccountChooser"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <img src={gmail} alt="gmail" />
+            <a href="https://accounts.google.com/AccountChooser/signinchooser" target="_blank" rel="noopener noreferrer">
+              <img src={gmail} alt="Login com Gmail" />
             </a>
-            <a
-              href="https://www.facebook.com/login/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <img src={facebook} alt="facebook" />
+            <a href="https://www.facebook.com/login/" target="_blank" rel="noopener noreferrer">
+              <img src={facebook} alt="Login com Facebook" />
             </a>
           </div>
         </div>
