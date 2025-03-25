@@ -19,6 +19,7 @@ import OrderHistory from "@pages/OrderHistory/OrderHistory"; // Novo componente
 import CheckoutPage from "@pages/CheckoutPage/CheckoutPage"; // Novo componente
 import CustomerForm from "@pages/CustomerForm/CustomerForm"; // Novo componente
 import FloatingChat from "@components/FloatingChat/FloatingChat"; 
+import SellerForm from "@pages/SellerForm/SellerForm"; // Novo componente
 
 function App() {
   return (
@@ -38,11 +39,14 @@ function App() {
         <Route path="Informacoes/" element={<Informacoes />} />
         <Route path="CriarProduto/" element={<ProductForm />}/>
         {/* Nova rota */}
-        <Route path="CadastroCliente/" element={<CustomerForm/>} />{" "}
+        <Route path="CustomerForm/" element={<CustomerForm/>} />{" "}
         {/* Nova rota */}
         <Route path="HistoricoPedidos/" element={<OrderHistory/>} />{" "}
         {/* Nova rota */}
-        <Route path="/Checkout" element={<CheckoutPage />} /> {/* Nova rota */}
+        <Route path="/SellerForm" element={<SellerForm />} />  {" "}
+        {/* Nova rota */}
+        <Route path="/Checkout" element={<CheckoutPage />} />  {" "}
+        {/* Nova rota */}
         <Route path="*" element={<Error />} />
       </Routes>
     </Router>

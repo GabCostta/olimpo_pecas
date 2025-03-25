@@ -1,0 +1,47 @@
+.seller-form {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.seller-form h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.seller-form label {
+  display: block;
+  margin-bottom: 15px;
+  font-weight: bold;
+  color: #555;
+}
+
+.seller-form input[type="text"],
+.seller-form input[type="email"] {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.seller-form button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  background-color: #ffc107;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.seller-form button:hover {
+  background-color: #000000;
+}
