@@ -18,10 +18,12 @@ import ProductForm from "@pages/ProductForm/ProductForm";
 import OrderHistory from "@pages/OrderHistory/OrderHistory"; // Novo componente
 import CheckoutPage from "@pages/CheckoutPage/CheckoutPage"; // Novo componente
 import CustomerForm from "@pages/CustomerForm/CustomerForm"; // Novo componente
+import FloatingChat from "@components/FloatingChat/FloatingChat"; 
 
 function App() {
   return (
     <Router>
+      <FloatingChat />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="ProductList/" element={<ProductList />} />
