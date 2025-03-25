@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Layout from "@components/Layout/Layout";
 import Cards2 from "@components/Cards/Cards2";
 import Cards from "@components/Cards/Cards";
-import CheckoutPage from "@pages/CheckoutPage/CheckoutPage";
+
 import farol from "@assets/img/farol.png";
 import axios from "axios";
 import flechaRosa from "@assets/img/flecha_icon.svg";
@@ -161,19 +161,27 @@ function CartPage() {
       alert("Seu carrinho está vazio!");
       return;
     }
-  
-    // Cálculo consistente com o CartSummary
+
     const subtotal = cartItems.reduce((acc, item) => {
       const price = isNaN(item.valoratual)
         ? 0
         : parseFloat(item.valoratual.toString().replace(",", "."));
       return acc + price * item.quantity;
     }, 0);
-  
+
     const totalWithShipping = subtotal + shipping;
     const discountValue = discountApplied ? totalWithShipping * 0.1 : 0;
     const total = totalWithShipping - discountValue;
-  
+
+    // Salva os dados no localStorage como fallback
+    localStorage.setItem('checkoutData', JSON.stringify({
+      subtotal,
+      shipping,
+      discount: discountValue,
+      total,
+      cartItems
+    }));
+
     navigate("/Checkout", {
       state: {
         subtotal,
@@ -185,34 +193,6 @@ function CartPage() {
     });
   };
 
-  // Função para finalizar a compra e registrar o pedido no backend
-  const finalizePurchase = async () => {
-    if (cartItems.length === 0) {
-      alert("Seu carrinho está vazio!");
-      return;
-    }
-    // Calcula o total (produto + frete)
-    const total =
-      cartItems.reduce((acc, item) => {
-        const price = isNaN(item.valoratual)
-          ? 0
-          : parseFloat(item.valoratual.toString().replace(",", "."));
-        return acc + price * item.quantity;
-      }, 0) + shipping;
-
-    try {
-      const response = await axios.post("http://localhost:3001/orders", {
-        items: cartItems,
-        total: total,
-      });
-      alert("Compra finalizada com sucesso!");
-      setCartItems([]);
-      localStorage.removeItem("cart");
-    } catch (error) {
-      console.error("Erro ao finalizar a compra:", error);
-      alert("Erro ao finalizar a compra. Tente novamente.");
-    }
-  };
 
   useEffect(() => {
     const savedCart = JSON.parse(localStorage.getItem("cart") || "[]");
@@ -300,10 +280,7 @@ function CartPage() {
               {errorMessage && <p className="error-message">{errorMessage}</p>}
             </div>
           </section>
-          {/* Botão de Finalizar Compra*/}
-          <button className="finalize-purchase" onClick={finalizePurchase}>
-            Finalizar Compra
-          </button>
+
         </div>
         <CartSummary
           cartItems={cartItems}

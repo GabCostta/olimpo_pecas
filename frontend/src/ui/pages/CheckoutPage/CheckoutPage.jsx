@@ -3,8 +3,9 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import "@styles/pages/CheckoutPage/CheckoutPage.css";
 import Layout from "@components/Layout/Layout.jsx";
 import PropTypes from 'prop-types';
+import axios from 'axios';
 
-function CheckoutPage() {
+function CheckoutPage({ setCartItems }) {  // Recebe setCartItems como prop
   const location = useLocation();
   const fallbackData = JSON.parse(localStorage.getItem('checkoutData')) || {};
   const { 
@@ -38,21 +39,40 @@ function CheckoutPage() {
     { id: 3, name: "PIX" },
   ];
 
-  const handleFinalizarCompra = () => {
-    if (!isLoggedIn) {
-      alert("Você precisa estar logado para finalizar a compra.");
-      navigate("/Registrar");
+  const handleFinalizarCompra = async () => {
+    if (!selectedPayment ) {
+      alert("Selecione um método de pagamento.");
       return;
     }
 
-    if (!selectedPayment || !selectedAddress) {
-      alert("Selecione um método de pagamento e um endereço de entrega.");
+    if (cartItems.length === 0) {
+      alert("Seu carrinho está vazio!");
       return;
     }
 
-    alert("Compra finalizada com sucesso!");
-    navigate("/Sucesso");
+    try {
+      const response = await axios.post("http://localhost:3001/orders", {
+        items: cartItems,
+        total: total,
+        paymentMethod: selectedPayment,
+        shippingAddress: selectedAddress
+      });
+
+      // Limpa o carrinho
+      if (setCartItems) {
+        setCartItems([]);
+      }
+      localStorage.removeItem("cart");
+      localStorage.removeItem("checkoutData");
+      
+      alert("Compra finalizada com sucesso!");
+      navigate("/Sucesso");
+    } catch (error) {
+      console.error("Erro ao finalizar a compra:", error);
+      alert("Erro ao finalizar a compra. Tente novamente.");
+    }
   };
+
 
   const handlePaymentSelection = (method) => {
     setSelectedPayment(method);
@@ -208,12 +228,14 @@ function CheckoutPage() {
 
 
 CheckoutPage.propTypes = {
+  setCartItems: PropTypes.func,
   location: PropTypes.shape({
     state: PropTypes.shape({
       subtotal: PropTypes.number,
       shipping: PropTypes.number,
       discount: PropTypes.number,
-      total: PropTypes.number
+      total: PropTypes.number,
+      cartItems: PropTypes.array
     })
   })
 };
