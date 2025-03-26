@@ -1,3 +1,4 @@
+// frontend\src\ui\components\Header\Header.jsx
 import React, { useState, useEffect } from "react";
 import "@styles/Components/Header/Header.css";
 import logo from "@assets/img/logo.svg";
@@ -7,6 +8,7 @@ import { Link } from "react-router-dom";
 function Header() {
   const [quantidade, setQuantidade] = useState(0);
 
+  // Função para calcular a quantidade
   const calcularQuantidade = () => {
     const savedCart = JSON.parse(localStorage.getItem("cart") || "[]");
     const totalQuantity = savedCart.reduce(
@@ -16,8 +18,27 @@ function Header() {
     setQuantidade(totalQuantity);
   };
 
+  // Escutar por mudanças no localStorage
   useEffect(() => {
+    // Calcular a quantidade inicial
     calcularQuantidade();
+
+    // Criar um event listener para atualizar quando o carrinho mudar
+    const handleStorageChange = () => {
+      calcularQuantidade();
+    };
+
+    // Adicionar o event listener
+    window.addEventListener("storage", handleStorageChange);
+
+    // Adicionar um event listener customizado para atualizações na mesma aba
+    window.addEventListener("cartUpdated", handleStorageChange);
+
+    // Limpar o event listener quando o componente for desmontado
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+      window.removeEventListener("cartUpdated", handleStorageChange);
+    };
   }, []);
 
   return (

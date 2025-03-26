@@ -38,26 +38,29 @@ function ProductViewPage() {
     });
   }, []); 
 
-  const addToCart = (product) => {
-   const savedCart = JSON.parse(localStorage.getItem("cart") || "[]");
-   const existingItem = savedCart.find(
-     (item) =>
-       item.id === product.id &&
-       item.cor === product.cor &&
-       item.tamanho === product.tamanho
-   );
+const addToCart = (product) => {
+  const savedCart = JSON.parse(localStorage.getItem("cart") || "[]");
+  const existingItem = savedCart.find(
+    (item) =>
+      item.id === product.id &&
+      item.cor === product.cor &&
+      item.tamanho === product.tamanho
+  );
 
-   if (existingItem) {
-     existingItem.quantity += 1;
-   } else {
-     savedCart.push({ ...product, quantity: 1 });
-   }
+  if (existingItem) {
+    existingItem.quantity += 1;
+  } else {
+    savedCart.push({ ...product, quantity: 1 });
+  }
 
-   setCartItems(savedCart);
-   localStorage.setItem("cart", JSON.stringify(savedCart));
+  setCartItems(savedCart);
+  localStorage.setItem("cart", JSON.stringify(savedCart));
 
-   alert(`Produto "${product.titulo}" adicionado ao carrinho!`);
- };
+  // Disparar evento para atualizar o Header
+  window.dispatchEvent(new Event("cartUpdated"));
+
+  alert(`Produto "${product.titulo}" adicionado ao carrinho!`);
+};
 
 
   if (!product) {
