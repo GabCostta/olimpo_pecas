@@ -20,7 +20,7 @@ app.use(express.json());
 app.use("/users", userRoutes);
 app.use("/produtos", productRoutes);
 app.use("/carrinho", cartRoutes);
-app.use("/orders", orderRoutes); // Rota de pedidos
+app.use("/orders", orderRoutes);
 
 app.get("/", (req, res) => {
     res.send("Servidor está rodando corretamente!");
