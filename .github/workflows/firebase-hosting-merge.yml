@@ -15,3 +15,4 @@ jobs:
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_OLIMPOPECAS_8F0C8 }}
           channelId: live
           projectId: olimpopecas-8f0c8
+          entryPoint: ./frontend  # Defina o caminho para o diretório onde está o firebase.json
