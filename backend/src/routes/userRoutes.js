@@ -1,9 +1,16 @@
 import express from "express";
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcrypt";
+import { authMiddleware } from "../middlewares/authMiddleware.js";
+
 
 const router = express.Router();
 const prisma = new PrismaClient();
+
+//Cria rota protegida no backend
+router.get("/profile", authMiddleware, async (req, res) => {
+    res.json({ user: req.user });
+  });
 
 // Criar um novo usuário (Cliente ou Vendedor), feito pelo Nicolas.
 router.post("/", async (req, res) => {
