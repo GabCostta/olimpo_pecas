@@ -1,10 +1,17 @@
 import express from "express";
+import userController from "../controllers/userController.js";
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcrypt";
 import { authMiddleware } from "../middlewares/authMiddleware.js";
 
 
 const router = express.Router();
+
+router.post("/", userController.createUser);
+router.get("/", userController.getAllUsers);
+router.get("/:id", userController.getUserById);
+router.put("/:id", userController.updateUser);
+router.delete("/:id", userController.deleteUser);
 const prisma = new PrismaClient();
 
 //Cria rota protegida no backend
