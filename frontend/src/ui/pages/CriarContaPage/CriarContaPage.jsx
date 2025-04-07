@@ -26,7 +26,7 @@ function CriarContaPage() {
     try {
       await createUserWithEmailAndPassword(auth, email, senha);
       alert("Conta criada com sucesso!");
-      navigate("/home");
+      navigate("/");
     } catch (error) {
       setErro(error.message);
     }
@@ -50,7 +50,7 @@ function CriarContaPage() {
     try {
       await signInWithPopup(auth, provider);
       alert("Login com Facebook realizado!");
-      navigate("/home");
+      navigate("/");
     } catch (error) {
       setErro(error.message);
     }

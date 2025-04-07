@@ -1,9 +1,19 @@
 import admin from "firebase-admin";
-import { prisma } from "../prismaClient.js";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 admin.initializeApp({
-    credential: admin.credential.cert(JSON.parse(process.env.FIREBASE_ADMIN_SDK)),
+    credential: admin.credential.cert({
+        projectId: process.env.FIREBASE_PROJECT_ID,
+        clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+        privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+    }),
 });
+
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
 
 export const authMiddleware = async (req, res, next) => {
     const authHeader = req.headers.authorization;
@@ -35,6 +45,22 @@ export const authMiddleware = async (req, res, next) => {
         next();
     } catch (error) {
         console.error("Erro ao verificar o token:", error);
-        res.status(403).json({ message: "Token inválido ou erro na autenticação" });
+        return res
+            .status(403)
+            .json({ message: "Token inválido ou erro na autenticação" });
     }
+};
+
+export const adminMiddleware = async (req, res, next) => {
+    if (req.user.role !== "admin") {
+        return res.status(403).json({ message: "Acesso negado" });
+    }
+    next();
+};
+
+export const userMiddleware = async (req, res, next) => {
+    if (req.user.role !== "user") {
+        return res.status(403).json({ message: "Acesso negado" });
+    }
+    next();
 };
