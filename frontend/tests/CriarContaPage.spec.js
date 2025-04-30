@@ -4,11 +4,15 @@ test.describe('Login - Testes de autenticação', () => {
   
   test('Login com credenciais válidas', async ({ page }) => {
   await page.goto('http://localhost:5173/Login');
-  await page.fill('input[type="email"]', 'usuario@exemplo.com');
-  await page.fill('input[type="password"]', 'senhaSegura123');
-  await page.click('button[type="submit"]');
-  await page.waitForURL('https://example.com/dashboard');
-  await expect(page.locator('h1')).toHaveText('Bem-vindo');
+  page.once('dialog', async (dialog) => {
+    expect(dialog.message()).toBe('Login realizado com sucesso!');
+    await dialog.accept();
+  });
+  await page.fill('input[type="email"]', 'aluno3@teste.com');
+  await page.fill('input[type="password"]', '123456');
+  await page.click('button[type="button"]');
+  await expect(page).toHaveURL('http://localhost:5173/');
+  // await expect(page.locator('h1')).toHaveText('Bem-vindo');
   });
 
   // test('Login com senha incorreta', async ({ page }) => {
