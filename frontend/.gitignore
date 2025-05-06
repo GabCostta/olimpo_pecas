@@ -8,12 +8,12 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
-<<<<<<< HEAD
-=======
 dist
->>>>>>> c99f86f (incializando projeto vite)
 dist-ssr
 *.local
+
+# Environment files
+.env
 
 # Editor directories and files
 .vscode/*
@@ -26,3 +26,9 @@ dist-ssr
 *.sln
 *.sw?
 node_modules
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/

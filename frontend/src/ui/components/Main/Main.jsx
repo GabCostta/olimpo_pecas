@@ -1,7 +1,9 @@
 import "@styles/Components/Main/Main.css";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import { auth } from "../../../firebaseConfig";
+import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider } from "firebase/auth";
+
 import logo from "@assets/img/logomain.png";
 import gmail from "@assets/img/gmail.svg";
 import facebook from "@assets/img/facebook.svg";
@@ -12,23 +14,38 @@ function Main() {
   const [erro, setErro] = useState("");
   const navigate = useNavigate();
 
+  // Login com email/senha no Firebase
   const handleLogin = async () => {
     try {
-      const resposta = await axios.post("http://localhost:3001/login", {
-        email,
-        senha
-      });
-
-      localStorage.setItem("token", resposta.data.token);
+      await signInWithEmailAndPassword(auth, email, senha);
       alert("Login realizado com sucesso!");
-      
-      if (resposta.data.usuario.role === "vendedor") {
-        navigate("/dashboard-vendedor");
-      } else {
-        navigate("/home");
-      }
+      navigate("/");
     } catch (error) {
-      setErro(error.response?.data?.mensagem || "Erro ao fazer login.");
+      setErro(error.message);
+    }
+  };
+
+  // Login com Google
+  const handleLoginGoogle = async () => {
+    const provider = new GoogleAuthProvider();
+    try {
+      await signInWithPopup(auth, provider);
+      alert("Login com Google realizado!");
+      navigate("/");
+    } catch (error) {
+      setErro(error.message);
+    }
+  };
+
+  // Login com Facebook
+  const handleLoginFacebook = async () => {
+    const provider = new FacebookAuthProvider();
+    try {
+      await signInWithPopup(auth, provider);
+      alert("Login com Facebook realizado!");
+      navigate("/");
+    } catch (error) {
+      setErro(error.message);
     }
   };
 
@@ -40,10 +57,10 @@ function Main() {
           <p>Novo cliente? Então registre-se <Link to="/Registrar">aqui</Link>.</p>
         </div>
         <div className="conta">
-          <h4>Login *</h4>
+          <h4>Email *</h4>
           <input
-            type="text"
-            placeholder="Insira seu login ou email"
+            type="email"
+            placeholder="Insira seu email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
@@ -63,12 +80,12 @@ function Main() {
         <div className="outrologin">
           <p>Ou faça login com</p>
           <div className="img">
-            <a href="https://accounts.google.com/AccountChooser/signinchooser" target="_blank" rel="noopener noreferrer">
+            <button onClick={handleLoginGoogle}>
               <img src={gmail} alt="Login com Gmail" />
-            </a>
-            <a href="https://www.facebook.com/login/" target="_blank" rel="noopener noreferrer">
+            </button>
+            <button onClick={handleLoginFacebook}>
               <img src={facebook} alt="Login com Facebook" />
-            </a>
+            </button>
           </div>
         </div>
       </div>

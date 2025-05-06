@@ -1,0 +1,18 @@
+name: Deploy to Firebase Hosting on merge
+on:
+  push:
+    branches:
+      - dev-gabriel 
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: cd frontend && npm install && npm ci && npm run build
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_OLIMPOPECAS_8F0C8 }}
+          channelId: live
+          projectId: olimpopecas-8f0c8
+          entryPoint: ./frontend  # Defina o caminho para o diretório onde está o firebase.json
