@@ -1,0 +1,23 @@
+{
+  "name": "olimpo_pecas",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GabCostta/olimpo_pecas.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GabCostta/olimpo_pecas/issues"
+  },
+  "homepage": "https://github.com/GabCostta/olimpo_pecas#readme",
+  "description": "",
+  "devDependencies": {
+    "playwright": "^1.52.0"
+  }
+}
