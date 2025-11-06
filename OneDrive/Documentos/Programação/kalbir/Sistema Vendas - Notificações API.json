@@ -1,0 +1,305 @@
+{
+  "name": "Sistema Vendas - Notificações API",
+  "nodes": [
+    {
+      "parameters": {
+        "url": "http://host.docker.internal:5000/api/vendedores",
+        "options": {}
+      },
+      "id": "71ee7aa3-d198-4b75-b84d-0ba5366f90a6",
+      "name": "Buscar Vendedores API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        240,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "url": "http://host.docker.internal:5000/api/clientes",
+        "options": {}
+      },
+      "id": "b857351d-fc73-43f9-b9ac-90b5b07843b4",
+      "name": "Buscar Clientes API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        240,
+        352
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// pegar todos os itens de entrada\nconst vendedores = $input.all();\n\n// pegar o static data global\nconst workflowStaticData = $getWorkflowStaticData('global');\n\n// último id salvo (ou 0 se não existir)\nconst lastId = workflowStaticData.lastVendedorId || 0;\n\n// filtrar apenas vendedores novos\nconst novosVendedores = vendedores.filter(v => v.json.codigo > lastId);\n\n// se houver novos vendedores\nif (novosVendedores.length > 0) {\n  // encontrar o vendedor com o maior código\n  const vendedorMaiorCodigo = novosVendedores.reduce((max, v) => \n    v.json.codigo > max.json.codigo ? v : max\n  );\n  \n  // atualizar o static data com o maior código encontrado\n  workflowStaticData.lastVendedorId = vendedorMaiorCodigo.json.codigo;\n  \n  // retornar APENAS o vendedor com maior código\n  return [vendedorMaiorCodigo];\n}\n\n// se não houver novos, retornar array vazio\nreturn [];"
+      },
+      "id": "aebeac53-1533-4c7f-85ef-35a7abeca6a6",
+      "name": "Filtrar Novos Vendedores",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        464,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// pegar todos os itens de entrada\nconst clientes = $input.all();\n\n// pegar o static data global\nconst workflowStaticData = $getWorkflowStaticData('global');\n\n// último id salvo de CLIENTES (ou 0 se não existir)\nconst lastId = workflowStaticData.lastClienteId || 0;\n\n// filtrar apenas clientes novos\nconst novosClientes = clientes.filter(c => c.json.codigo > lastId);\n\n// se houver novos clientes\nif (novosClientes.length > 0) {\n  // encontrar o cliente com o maior código\n  const clienteMaiorCodigo = novosClientes.reduce((max, c) => \n    c.json.codigo > max.json.codigo ? c : max\n  );\n  \n  // atualizar o static data com o maior código encontrado\n  workflowStaticData.lastClienteId = clienteMaiorCodigo.json.codigo;\n  \n  // retornar APENAS o cliente com maior código\n  return [clienteMaiorCodigo];\n}\n\n// se não houver novos, retornar array vazio\nreturn [];"
+      },
+      "id": "8517d4bc-353c-43d6-ad18-e3cfbccc5f9f",
+      "name": "Filtrar Novos Clientes",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        464,
+        352
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "1",
+              "leftValue": "={{ $input.all().length }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "223854e8-ea67-4cfb-9a36-9541e7d377fa",
+      "name": "Tem Novos Vendedores?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        704,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "1",
+              "leftValue": "={{ $input.all().length }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "af68a3aa-5459-4236-92b2-7883e3db1731",
+      "name": "Tem Novos Clientes?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        704,
+        352
+      ]
+    },
+    {
+      "parameters": {
+        "sendTo": "nicolasfirminodev@gmail.com",
+        "subject": "Novo Vendedor!",
+        "message": "=Temos mais um vendedor no time!  {{ $('Filtrar Novos Vendedores').item.json.nome }} vem  para somar!",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        944,
+        0
+      ],
+      "id": "fc55fc40-bcb0-4ae0-96d8-00927048d555",
+      "name": "Send a message",
+      "webhookId": "58c81d97-e35c-4380-bca4-67a8e2f09522",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "NOtjlxKmWdgTL6kO",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "nicolasfirminodev@gmail.com",
+        "subject": "Novo Cliente!",
+        "message": "=Temos mais um cliente! {{ $json.nome }} escolheu o melhor lugar para suas compras!",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        944,
+        352
+      ],
+      "id": "fb97e4de-7a7d-4b1a-affa-1d12d065822d",
+      "name": "Send a message1",
+      "webhookId": "58c81d97-e35c-4380-bca4-67a8e2f09522",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "NOtjlxKmWdgTL6kO",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "novo-vendedor",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "b3de4baf-7091-4000-a907-81d0559d945c",
+      "name": "Webhook Vendedor",
+      "webhookId": "e74801a3-4c54-4d57-a22b-83bf439a4e0b"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "novo-cliente",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        352
+      ],
+      "id": "861a32b8-c063-45ca-a0ea-0932945f5e01",
+      "name": "Webhook Cliente",
+      "webhookId": "f95912b4-5c65-4e68-b33c-94cf550b5f1c"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Buscar Vendedores API": {
+      "main": [
+        [
+          {
+            "node": "Filtrar Novos Vendedores",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar Clientes API": {
+      "main": [
+        [
+          {
+            "node": "Filtrar Novos Clientes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filtrar Novos Vendedores": {
+      "main": [
+        [
+          {
+            "node": "Tem Novos Vendedores?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filtrar Novos Clientes": {
+      "main": [
+        [
+          {
+            "node": "Tem Novos Clientes?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tem Novos Vendedores?": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tem Novos Clientes?": {
+      "main": [
+        [
+          {
+            "node": "Send a message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook Vendedor": {
+      "main": [
+        [
+          {
+            "node": "Buscar Vendedores API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook Cliente": {
+      "main": [
+        [
+          {
+            "node": "Buscar Clientes API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "967fc380-ae8f-4441-8eb8-83537c47e697",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "415b44055d64c6bdd9bee565a0a5d02b537b365a13f72079e0a8cd14d6d150c2"
+  },
+  "id": "hFLnhJAKaiPC74ph",
+  "tags": []
+}

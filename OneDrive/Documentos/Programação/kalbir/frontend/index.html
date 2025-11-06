@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Vendas</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/app.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Sistema de Vendas</h1>
+        
+        <div class="nav">
+            <a href="/">Filtros</a>
+            <a href="/cadastro-vendedor">Cadastrar Vendedor</a>
+            <a href="/cadastro-cliente">Cadastrar Cliente</a>
+            <a href="/admin">Admin</a>
+        </div>
+
+        <div class="filter-section">
+            <h2>Filtrar Dados</h2>
+            <div class="form-group">
+                <label>Tipo de Visualização:</label>
+                <select id="tipoFiltro">
+                    <option value="vendedores">Vendedores</option>
+                    <option value="clientes">Clientes</option>
+                </select>
+            </div>
+            <button onclick="carregarDados()">Carregar Dados</button>
+        </div>
+
+        <div id="resultados"></div>
+    </div>
+
+
+</body>
+</html>

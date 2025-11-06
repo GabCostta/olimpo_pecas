@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administração - Visualizar Tabelas</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/app.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Administração - Visualizar Tabelas</h1>
+        
+        <div class="nav">
+            <a href="/">Filtros</a>
+            <a href="/cadastro-vendedor">Cadastrar Vendedor</a>
+            <a href="/cadastro-cliente">Cadastrar Cliente</a>
+            <a href="/admin">Admin</a>
+        </div>
+
+        <div class="filter-section">
+            <div class="form-group">
+                <label for="filtroNome">Filtrar por Nome:</label>
+                <input type="text" id="filtroNome" placeholder="Digite o nome para filtrar..." oninput="aplicarFiltro()">
+            </div>
+            <button onclick="carregarTodos()">Carregar Todas as Tabelas</button>
+        </div>
+
+        <div id="tabelas"></div>
+    </div>
+
+    <script>
+        let dadosOriginais = { vendedores: [], clientes: [] };
+
+        async function carregarTodos() {
+            const tabelas = document.getElementById('tabelas');
+            tabelas.innerHTML = '<p class="loading">Carregando dados...</p>';
+            
+            dadosOriginais.vendedores = await obterVendedores();
+            dadosOriginais.clientes = await obterClientes();
+            
+            exibirTabelas(dadosOriginais.vendedores, dadosOriginais.clientes);
+        }
+
+        function exibirTabelas(vendedores, clientes) {
+            const tabelas = document.getElementById('tabelas');
+            
+            let html = '<h2>Vendedores</h2>';
+            if (vendedores.length === 0) {
+                html += '<p>Nenhum vendedor encontrado</p>';
+            } else {
+                html += '<table><tr><th>Código</th><th>Nome</th><th>Loja</th></tr>';
+                vendedores.forEach(v => {
+                    html += `<tr><td>${v.codigo}</td><td>${v.nome}</td><td>${v.loja}</td></tr>`;
+                });
+                html += '</table>';
+            }
+            
+            html += '<h2>Clientes</h2>';
+            if (clientes.length === 0) {
+                html += '<p>Nenhum cliente encontrado</p>';
+            } else {
+                html += '<table><tr><th>Código</th><th>Nome</th><th>Vendedores</th><th>Lojas</th></tr>';
+                clientes.forEach(c => {
+                    html += `<tr><td>${c.codigo}</td><td>${c.nome}</td><td>${c.vendedores || 'N/A'}</td><td>${c.lojas || 'N/A'}</td></tr>`;
+                });
+                html += '</table>';
+            }
+            
+            tabelas.innerHTML = html;
+        }
+
+        function aplicarFiltro() {
+            const filtro = document.getElementById('filtroNome').value.toLowerCase();
+            
+            const vendedoresFiltrados = dadosOriginais.vendedores.filter(v => 
+                v.nome.toLowerCase().includes(filtro)
+            );
+            
+            const clientesFiltrados = dadosOriginais.clientes.filter(c => 
+                c.nome.toLowerCase().includes(filtro) || 
+                (c.vendedores && c.vendedores.toLowerCase().includes(filtro))
+            );
+            
+            exibirTabelas(vendedoresFiltrados, clientesFiltrados);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            carregarTodos();
+        });
+    </script>
+</body>
+</html>
